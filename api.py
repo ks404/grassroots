@@ -11,7 +11,8 @@ except ImportError:
           '(See /grassroots/settings/local.py.example for an example or consult the wiki for more information).')
     raise
 
-BASE_API_STR = 'http://congress.api.sunlightfoundation.com/'
+BASE_SUNLIGHT_API_STR = 'http://congress.api.sunlightfoundation.com/'
+BASE_GOOGLE_CIVIC_API_STR = 'https://www.googleapis.com/civicinfo/v2/'
 
 def query_api(query, page):
     return requests.get('{}{}?apikey={}&per_page=50&page={}'.format(BASE_API_STR, query, SUNLIGHT_API_KEY, page))
