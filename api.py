@@ -1,6 +1,6 @@
 import requests
 import csv
-from legislators.models import Legislator
+from legislators.models import FedCongressPerson
 from bills.models import Bill
 
 try:
@@ -18,7 +18,7 @@ def query_api(query, page):
     return requests.get('{}{}?apikey={}&per_page=50&page={}'.format(BASE_API_STR, query, SUNLIGHT_API_KEY, page))
 
 def create_leg_object(obj):
-    Legislator.objects.create(
+    FedCongressPerson.objects.create(
         bioguide_id=obj['bioguide_id'],
         birthday=obj['birthday'],
         chamber=obj['chamber'],
@@ -59,7 +59,7 @@ def read_from_csv():
             else:
                 chamber = 'O'
 
-            _, created = Legislator.objects.get_or_create(
+            _, created = FedCongressPerson.objects.get_or_create(
                 chamber=chamber,
                 title=row[0],
                 first_name=row[1],
@@ -105,6 +105,6 @@ def create_bills(page):
                         'official_title': bill['official_title'],
                         'popular_title': bill['popular_title'],
                         'short_title': bill['short_title'],
-                        'sponsor': Legislator.objects.get(bioguide_id=bill['sponsor_id']),
+                        'sponsor': FedCongressPerson.objects.get(bioguide_id=bill['sponsor_id']),
                     }
                 )

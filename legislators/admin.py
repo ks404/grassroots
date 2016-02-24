@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Legislator
+from .models import FedCongressPerson
 
 # Register your models here.
-@admin.register(Legislator)
-class LegislatorAdmin(admin.ModelAdmin):
+@admin.register(FedCongressPerson)
+class FedCongressPersonAdmin(admin.ModelAdmin):
     ordering = ('last_name',)
     list_filter = ('in_office', 'chamber',)
 
