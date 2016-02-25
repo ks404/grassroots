@@ -1,7 +1,9 @@
 import requests
 import csv
+from grassroots.settings.local import SUNLIGHT_API_KEY
 from legislators.models import FedCongressPerson
 from bills.models import Bill
+
 
 try:
     from grassroots.settings.local import SUNLIGHT_API_KEY
@@ -14,8 +16,8 @@ except ImportError:
 BASE_SUNLIGHT_API_STR = 'http://congress.api.sunlightfoundation.com/'
 BASE_GOOGLE_CIVIC_API_STR = 'https://www.googleapis.com/civicinfo/v2/'
 
-def query_api(query, page):
-    return requests.get('{}{}?apikey={}&per_page=50&page={}'.format(BASE_API_STR, query, SUNLIGHT_API_KEY, page))
+def query_api(query, page=1):
+    return requests.get('{}{}?apikey={}&per_page=50&page={}'.format(BASE_SUNLIGHT_API_STR, query, SUNLIGHT_API_KEY, page))
 
 def create_leg_object(obj):
     FedCongressPerson.objects.create(
