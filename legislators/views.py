@@ -23,9 +23,7 @@ def federal_zip_lookup(request, zipcode):
         query = congress.locate_legislators_by_zip(zipcode)
 
         # Get the Bioguide IDs of the legislators returned
-        bioguide_ids = []
-        for leg in query:
-            bioguide_ids.append(leg['bioguide_id'])
+        bioguide_ids = [leg['bioguide_id'] for leg in query]
 
         #Query the database for all the legislators in that list
         legislators = FedCongressPerson.objects.filter(bioguide_id__in=bioguide_ids)
