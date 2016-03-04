@@ -49,8 +49,8 @@ def create_leg_object(obj):
         title=obj['title']
     )
 
-def read_from_csv():
-    with open('legislators.csv') as f:
+def read_from_csv(path):
+    with open(path) as f:
         reader = csv.reader(f)
         next(reader, None)
         for row in reader:
