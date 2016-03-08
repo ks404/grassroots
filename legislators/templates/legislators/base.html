@@ -20,15 +20,25 @@
 
     {% compress css %}
         {% comment %}
-            Per-page CSS is compressed separately so that the global stuff doesn't get re-downloaded each time 
+            Per-page CSS is compressed separately so that the global stuff doesn't get re-downloaded each time
         {% endcomment %}
         {% block extra_css %}{% endblock %}
     {% endcompress %}
 
 </head>
 <body>
-    {% block content %}{% endblock %}
-
+{% load staticfiles %}
+{% load sass_tags %}
+<link href="{% sass_src 'css/index.scss' %}" rel="stylesheet" type="text/css" />
+<script src="{% static 'js/index.js' %}"></script>
+<div id="landing" class="unactive">
+  <div id="user-menu">
+    <ul>
+      <li>Login</li>
+    </ul>
+  </div>
+  {% block content %}{% endblock %}
+</div>
     {% comment %}
         JavaScript at the bottom for fast page loading:
         http://developer.yahoo.com/performance/rules.html#js_bottom
@@ -38,12 +48,12 @@
         {% comment %}
             Core JS includes (for inclusion on all pages) to be specified here
         {% endcomment %}
-        <script src="{{ STATIC_URL }}js/jquery-1.9.1.js"></script>
+		<script src="{% static 'js/jquery-1.9.1.js' %}"></script>
     {% endcompress %}
 
     {% compress js %}
         {% comment %}
-            Per-page JS is compressed separately so that the global stuff doesn't get re-downloaded each time 
+            Per-page JS is compressed separately so that the global stuff doesn't get re-downloaded each time
         {% endcomment %}
         {% block extra_js %}{% endblock %}
     {% endcompress %}
