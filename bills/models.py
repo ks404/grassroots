@@ -1,5 +1,5 @@
 from django.db import models
-from legislators.models import Legislator
+from legislators.models import FedCongressPerson
 
 # Create your models here.
 class Bill(models.Model):
@@ -34,7 +34,7 @@ class Bill(models.Model):
     official_title = models.TextField()
     popular_title = models.CharField(max_length=(255), null=True, blank=True)
     short_title = models.CharField(max_length=(255), null=True, blank=True)
-    sponsor = models.ForeignKey(Legislator)
+    sponsor = models.ForeignKey(FedCongressPerson)
 
     def __str__(self):
         if self.popular_title:
