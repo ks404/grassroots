@@ -1,0 +1,16 @@
+{% extends 'legislators/base.html' %}
+{% load staticfiles %}
+{% block content %}
+<div class="description">
+<div class="logo-name">
+  <img src="{% static 'images/flag-logo.svg' %}" />
+  <h1>Grassroots</h1>
+</div>
+<p>Find and track your representatives at every level of government.</p>
+<form method="POST" action="{% url 'legislators:enter-zip' %}">
+  {% csrf_token %}
+  <span class="blinking-cursor">|</span>
+  <input type="text" onload="focusonthis" name="zipcode" id="zipcode" value="{{ zipcode }}" placeholder="Enter zipcode" />
+</form>
+</div>
+{% endblock %}

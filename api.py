@@ -1,16 +1,26 @@
 import requests
 import csv
-from legislators.models import Legislator
+from grassroots.settings.local import SUNLIGHT_API_KEY
+from legislators.models import FedCongressPerson
 from bills.models import Bill
 
-SUNLIGHT_API_KEY='6b879d65c49742058a88a0b955b3f172'
-BASE_API_STR = 'http://congress.api.sunlightfoundation.com/'
 
-def query_api(query, page):
-    return requests.get('{}{}?apikey={}&per_page=50&page={}'.format(BASE_API_STR, query, SUNLIGHT_API_KEY, page))
+try:
+    from grassroots.settings.local import SUNLIGHT_API_KEY
+except ImportError:
+    print('Sunlight API key required. Please obtain an API key from '
+          'https://sunlightfoundation.com/api/accounts/register/ and place it in /grassroots/settings/local.py '
+          '(See /grassroots/settings/local.py.example for an example or consult the wiki for more information).')
+    raise
+
+BASE_SUNLIGHT_API_STR = 'http://congress.api.sunlightfoundation.com/'
+BASE_GOOGLE_CIVIC_API_STR = 'https://www.googleapis.com/civicinfo/v2/'
+
+def query_api(query, page=1):
+    return requests.get('{}{}?apikey={}&per_page=50&page={}'.format(BASE_SUNLIGHT_API_STR, query, SUNLIGHT_API_KEY, page))
 
 def create_leg_object(obj):
-    Legislator.objects.create(
+    FedCongressPerson.objects.create(
         bioguide_id=obj['bioguide_id'],
         birthday=obj['birthday'],
         chamber=obj['chamber'],
@@ -39,8 +49,8 @@ def create_leg_object(obj):
         title=obj['title']
     )
 
-def read_from_csv():
-    with open('legislators.csv') as f:
+def read_from_csv(path):
+    with open(path) as f:
         reader = csv.reader(f)
         next(reader, None)
         for row in reader:
@@ -51,7 +61,7 @@ def read_from_csv():
             else:
                 chamber = 'O'
 
-            _, created = Legislator.objects.get_or_create(
+            _, created = FedCongressPerson.objects.get_or_create(
                 chamber=chamber,
                 title=row[0],
                 first_name=row[1],
@@ -97,6 +107,6 @@ def create_bills(page):
                         'official_title': bill['official_title'],
                         'popular_title': bill['popular_title'],
                         'short_title': bill['short_title'],
-                        'sponsor': Legislator.objects.get(bioguide_id=bill['sponsor_id']),
+                        'sponsor': FedCongressPerson.objects.get(bioguide_id=bill['sponsor_id']),
                     }
                 )
